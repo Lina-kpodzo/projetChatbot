@@ -1,12 +1,15 @@
-<!DOCTYPE html>
-<!-- Modèle à dupliquer pour chaque nouvelle page.
-     Changez le titre ('Exemple') et le contenu du <main>. -->
-<html lang="fr" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{base :: layout('Exemple', ~{::main})}">
+<!doctype html>
+<html lang="en" th:replace="~{base :: layout(~{::title}, ~{main})}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chatbot</title>
+</head>
 <body>
-<main class="container flex-grow-1 py-5">
-    <h1>Titre de la page</h1>
-    <p>Contenu de la page.</p>
+<main>
+    <!-- Code HTML ICI -->
 </main>
 </body>
 </html>
