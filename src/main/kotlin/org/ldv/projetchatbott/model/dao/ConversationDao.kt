@@ -1,7 +1,4 @@
-package org.ldv.chatbot.model.dao
+package org.ldv.projetchatbott.model.dao
 
-import org.ldv.chatbot.model.entity.ModeleIA
-import org.springframework.data.jpa.repository.JpaRepository
-
-interface ModeleIADAO : JpaRepository<ModeleIA, Long> {
+interface ConversationDao {
 }
