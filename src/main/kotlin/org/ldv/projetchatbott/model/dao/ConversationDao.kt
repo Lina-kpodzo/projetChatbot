@@ -1,4 +1,7 @@
 package org.ldv.projetchatbott.model.dao
 
-interface ConversationDao {
+import org.ldv.projetchatbott.model.entity.Conversation
+import org.springframework.data.jpa.repository.JpaRepository
+
+interface ConversationDAO : JpaRepository<Conversation, Long> {
 }
