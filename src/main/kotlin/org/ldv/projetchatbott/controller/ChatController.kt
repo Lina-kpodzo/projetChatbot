@@ -22,29 +22,24 @@ class ChatController(
     private val modeleIADAO: ModeleIADAO
 ) {
 
-    // Page d'accueil
+    // Affichage de la page d'accueil (nouvelle conversation)
     @GetMapping("/")
     fun accueil(model: Model): String {
         model.addAttribute("conversation", null)
         model.addAttribute("modeles", modeleIADAO.findAll())
         model.addAttribute("messages", emptyList<Message>())
-        model.addAttribute(
-            "conversations",
-            conversationDAO.findAllByOrderByDateCreationDesc()
-        )
+        model.addAttribute("conversations", conversationDAO.findAllByOrderByDateCreationDesc())
         return "utilisateur/chat"
     }
 
-    // Création d'une nouvelle conversation
+    // Création d'une nouvelle conversation et premier appel IA
     @PostMapping("/conversations")
     fun creerConversation(
         @RequestParam prompt: String,
         @RequestParam idModele: Long
     ): String {
         val modele = modeleIADAO.findById(idModele)
-            .orElseThrow {
-                ResponseStatusException(HttpStatus.BAD_REQUEST, "Modèle IA introuvable")
-            }
+            .orElseThrow { ResponseStatusException(HttpStatus.BAD_REQUEST, "Modèle IA introuvable") }
 
         val conversation = Conversation(
             titre = prompt.take(50),
@@ -72,11 +67,12 @@ class ChatController(
             )
             messageDAO.save(messageAssistant)
         } catch (e: Exception) {
-            println("Erreur lors de l'appel au modèle ${modele.nom} ${e.message}")
+            println("Erreur lors de l'appel au modèle ${modele.nom} : ${e.message}")
         }
 
-        conversationEnregistree.DateCreation = LocalDateTime.now()
+
         conversationDAO.save(conversationEnregistree)
+
         return "redirect:/conversations/${conversationEnregistree.id}"
     }
 
@@ -89,15 +85,9 @@ class ChatController(
         val conversation = conversationDAO.findById(id)
             .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
 
-        model.addAttribute(
-            "conversations",
-            conversationDAO.findAllByOrderByDateCreationDesc()
-        )
+        model.addAttribute("conversations", conversationDAO.findAllByOrderByDateCreationDesc())
         model.addAttribute("conversation", conversation)
-        model.addAttribute(
-            "messages",
-            conversation.messages.sortedBy { it.dateCreation }
-        )
+        model.addAttribute("messages", conversation.messages.sortedBy { it.dateCreation })
         return "utilisateur/chat"
     }
 
@@ -130,12 +120,12 @@ class ChatController(
             )
             messageDAO.save(messageAssistant)
         } catch (e: Exception) {
-            println("Erreur lors de l'appel à ${conversation.modeleIA!!.nom} ${e.message}")
+            println("Erreur lors de l'appel à ${conversation.modeleIA!!.nom} : ${e.message}")
         }
 
-        conversation.DateCreation = LocalDateTime.now()
+
         conversationDAO.save(conversation)
+
         return "redirect:/conversations/$id"
     }
 }
-```[cite: 2]
